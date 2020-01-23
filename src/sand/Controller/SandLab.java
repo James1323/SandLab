@@ -49,11 +49,20 @@ public class SandLab
   {
       //Step 3
    //Hint - use a nested for loop
-	  for(int row = 0; index < grid.length; index++)
+	  for(int rows = 0; rows < grid.length; rows++)
 	  {
-		  for(int cols = 0; indexTwo < display.size(); indexTwo++;
+		  for(int cols = 0; cols < grid[0].length; cols++)
 		  {
-			  setColor();
+			  //empty
+			  if(this.grid[rows][cols] == EMPTY)
+			  {
+				  display.setColor(rows, cols, Color.black);
+			  }
+			  //metal
+			  else if(this.grid[rows][cols] == METAL)
+			  {
+				  display.setColor(rows, cols, Color.gray);
+			  }
 		  }
 		  
 	  }
