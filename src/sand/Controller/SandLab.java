@@ -80,13 +80,25 @@ public class SandLab
   //Step 5,7
   //called repeatedly.
   //causes one random particle in grid to maybe do something.
-  public void fallingSand()
+  public void phyisics()
   {
     //Remember, you need to access both row and column to specify a spot in the array
     //The scalar refers to how big the value could be
     //int someRandom = (int) (Math.random() * scalar)
     //remember that you need to watch for the edges of the array
+    int randomRow = (int) (Math.random() * grid.length);
+    int randomCol = (int) (Math.random() * grid.length);
     
+    
+    if(this.grid[randomRow][randomCol] == SAND)
+    {
+    	if(randomRow +1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
+    	{
+    		this.grid[randomRow][randomCol] = EMPTY;
+    		this.grid[randomRow + 1][randomCol] = SAND;
+    	}
+    }
+    		
     
   }
   
@@ -97,7 +109,7 @@ public class SandLab
     {
       for (int i = 0; i < display.getSpeed(); i++)
       {
-        fallingSand();
+    	  phyisics();
       }
       updateDisplay();
       display.repaint();
