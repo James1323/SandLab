@@ -11,6 +11,8 @@ public class SandLab
   public static final int EMPTY = 0;
   public static final int METAL = 1;
   public static final int SAND = 2;
+  public static final int WATER = 3;
+  public static final int GAS = 4;
   
   //do not add any more fields below
   private int[][] grid;
@@ -32,6 +34,8 @@ public class SandLab
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
+    names[WATER] = "Water";
+    names[GAS] = "Gas";
     
     //1. Add code to initialize the data member grid with same dimensions
     this.grid = new int [numRows] [numCols];
@@ -70,6 +74,16 @@ public class SandLab
 			  {
 				  display.setColor(rows, cols, Color.yellow);
 			  }
+			  //water
+			  else if(this.grid[rows][cols] == WATER)
+			  {
+				  display.setColor(rows, cols, Color.blue);
+			  }
+			  //gas
+			  else if(this.grid[rows][cols] == GAS )
+			  {
+				  display.setColor(rows, cols, Color.green);
+			  }
 			  
 		  }
 		  
@@ -90,6 +104,7 @@ public class SandLab
     int randomCol = (int) (Math.random() * grid.length);
     
     
+    //falling sand
     if(this.grid[randomRow][randomCol] == SAND)
     {
     	if(randomRow +1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
@@ -98,7 +113,8 @@ public class SandLab
     		this.grid[randomRow + 1][randomCol] = SAND;
     	}
     }
-    		
+    //gas movement
+    //water movement
     
   }
   
