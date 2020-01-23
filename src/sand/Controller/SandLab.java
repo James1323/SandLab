@@ -105,17 +105,46 @@ public class SandLab
     
     
     //falling sand
+    //if space is sand
     if(this.grid[randomRow][randomCol] == SAND)
     {
+    	//if less than grid size and space below is empty
     	if(randomRow +1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
     	{
+    		//switch empty with sand
     		this.grid[randomRow][randomCol] = EMPTY;
     		this.grid[randomRow + 1][randomCol] = SAND;
     	}
     }
     //gas movement
-    //water movement
     
+    
+    //water movement
+    if(this.grid[randomRow][randomCol] == WATER)
+    {
+    	//less than grid size on height and width
+    	if(randomRow +1 < grid.length && randomCol +1 < grid.length) 
+    	{
+    		//if space below is empty
+    		if( grid[randomRow + 1] [randomCol] == EMPTY)
+    		//switch empty with water
+    		{
+    			this.grid[randomRow][randomCol] = EMPTY;
+    			this.grid[randomRow + 1][randomCol] = WATER;
+    		}
+    		//cant go out of bounds on the width and the width is empty
+    		else if (randomCol + 1 < grid[0].length && grid[randomRow][randomCol + 1] == EMPTY)
+    		{
+    			this.grid[randomRow][randomCol] = EMPTY;
+    			this.grid[randomRow][randomCol + 1] = WATER;
+    		}
+    		//
+    		else if (randomCol - 1 >= 0 && grid[randomRow][randomCol] == EMPTY)
+    		{
+    			grid
+    		}
+    	}
+    }
   }
   
   //do not modify this method!
