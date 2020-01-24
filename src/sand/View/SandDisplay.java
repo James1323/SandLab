@@ -1,4 +1,4 @@
-package View;
+package sand.View;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -29,7 +29,7 @@ public class SandDisplay extends JComponent implements MouseListener,
     speed = computeSpeed(1);
     
     //determine cell size
-    cellSize = Math.max(1, 600 / Math.max(numRows, numCols));
+    cellSize = Math.max(1, 500 / Math.max(numRows, numCols));
     image = new BufferedImage(numCols * cellSize, numRows * cellSize, BufferedImage.TYPE_INT_RGB);
     
     frame = new JFrame(title);
