@@ -1,4 +1,4 @@
-package sand.Controller;
+package Controller;
 
 public class SandRunner
 {

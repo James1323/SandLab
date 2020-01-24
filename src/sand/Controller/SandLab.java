@@ -1,8 +1,8 @@
-package sand.Controller;
+package Controller;
 import java.awt.*;
 import java.util.*;
 
-import sand.View.SandDisplay;
+import View.SandDisplay;
 
 public class SandLab
 {
@@ -13,6 +13,8 @@ public class SandLab
   public static final int SAND = 2;
   public static final int WATER = 3;
   public static final int GAS = 4;
+  public static final int SALT = 5;
+  public static final int SWATER = 6;
   
   //do not add any more fields below
   private int[][] grid;
@@ -36,6 +38,8 @@ public class SandLab
     names[SAND] = "Sand";
     names[WATER] = "Water";
     names[GAS] = "Gas";
+    names[SALT] = "Salt";
+    names[SWATER] = "SaltWater";
     
     //1. Add code to initialize the data member grid with same dimensions
     this.grid = new int [numRows] [numCols];
@@ -60,6 +64,8 @@ public class SandLab
 		  for(int cols = 0; cols < grid[0].length; cols++)
 		  {
 			  //empty
+//			  colorElement(EMPTY, Color.black);
+//			  colorElement(METAL, Color.gray);
 			  if(this.grid[rows][cols] == EMPTY)
 			  {
 				  display.setColor(rows, cols, Color.black);
@@ -84,17 +90,25 @@ public class SandLab
 			  {
 				  display.setColor(rows, cols, Color.green);
 			  }
+			  //Salt
+			  else if(this.grid[rows][cols] == SALT)
+			  {
+				  display.setColor(rows, cols, Color.white);
+			  }
+			  //SaltWater
+			 
 			  
 		  }
 		  
 	  }
     
   }
+  
 
   //Step 5,7
   //called repeatedly.
   //causes one random particle in grid to maybe do something.
-  public void phyisics()
+  public void physics()
   {
     //Remember, you need to access both row and column to specify a spot in the array
     //The scalar refers to how big the value could be
@@ -106,16 +120,20 @@ public class SandLab
     
     //falling sand
     //if space is sand
-    if(this.grid[randomRow][randomCol] == SAND)
-    {
-    	//if less than grid size and space below is empty
-    	if(randomRow +1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
-    	{
-    		//switch empty with sand
-    		this.grid[randomRow][randomCol] = EMPTY;
-    		this.grid[randomRow + 1][randomCol] = SAND;
-    	}
-    }
+    
+//    if(this.grid[randomRow][randomCol] == SAND)
+//    {
+//    	//if less than grid size and space below is empty
+//    	if(randomRow +1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
+//    	{
+//    		//switch empty with sand
+//    		this.grid[randomRow][randomCol] = EMPTY;
+//    		this.grid[randomRow + 1][randomCol] = SAND;
+//    	}
+//    }
+    
+    powderPhysics(SAND, randomRow, randomCol);
+    powderPhysics(SALT, randomRow, randomCol);
     //gas movement
     
     
@@ -132,19 +150,81 @@ public class SandLab
     			this.grid[randomRow][randomCol] = EMPTY;
     			this.grid[randomRow + 1][randomCol] = WATER;
     		}
-    		//cant go out of bounds on the width and the width is empty
+    		//cant go out of bounds on the right is empty
     		else if (randomCol + 1 < grid[0].length && grid[randomRow][randomCol + 1] == EMPTY)
     		{
     			this.grid[randomRow][randomCol] = EMPTY;
     			this.grid[randomRow][randomCol + 1] = WATER;
     		}
-    		//
-    		else if (randomCol - 1 >= 0 && grid[randomRow][randomCol] == EMPTY)
+    		//column is above 0 and left is empty 
+    		else if (randomCol - 1 >= 0 && grid[randomRow][randomCol- 1] == EMPTY)
     		{
-    			grid
+    			this.grid[randomRow][randomCol] = EMPTY;
+    			this.grid[randomRow][randomCol - 1] = WATER;
     		}
+    		
+    		
     	}
     }
+  }
+  
+  //HELPER FUNCTIONS
+  
+  public void colorElement(final int ELEMENT, Color color)
+  {
+	  int rows = 0, cols = 0;
+	  if(this.grid[rows][cols] == ELEMENT )
+	  {
+		  display.setColor(rows, cols, color);
+	  }
+  }
+  
+  public void powderPhysics(final int ELEMENT, int randomRow, int randomCol)
+  {
+	  int goLeftOrRight = (int) (Math.random() * 2);
+	  if(this.grid[randomRow][randomCol] == ELEMENT)
+	    {
+	    	//if less than grid size on the bottom and space below is empty
+	    	if(randomRow +1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
+	    	{
+	    		//switch empty with sand
+	    		this.grid[randomRow][randomCol] = EMPTY;
+	    		this.grid[randomRow + 1][randomCol] = ELEMENT;
+	    	}
+	    	//if less than grid size on bottom and greater than 0 and less than grid length
+	    	else if(randomRow + 1 < grid.length && randomCol >= 0 && randomCol < grid.length)
+	    	{
+	    		if(goLeftOrRight == 0 && randomCol + 1 < grid.length && randomCol - 1 >= 0)
+	    		{
+		    		//if random is less than grid size and right is empty
+			    	if(randomCol + 1 < grid.length && grid[randomRow][randomCol + 1] == EMPTY && grid[randomRow][randomCol + 1] != ELEMENT)
+			    	{
+			    		//if bottom is the same element move right and if right is less than grid size
+						if(randomCol + 1 < grid.length && randomRow + 1 < grid.length && grid[randomRow + 1][randomCol] == ELEMENT)
+						{
+							this.grid[randomRow][randomCol] = EMPTY;
+							this.grid[randomRow][randomCol + 1] = ELEMENT;
+						}
+			    	}
+	    		}
+		    	
+		    	
+	    		else if(goLeftOrRight == 1 && randomCol - 1 >= 0 && randomCol + 1 < grid.length)
+	    		{
+	    			//if random is greater than 0 and grid left is empty and bottom is not element
+			    	if (randomCol - 1 >= 0 && grid[randomRow][randomCol - 1] == EMPTY && grid[randomRow][randomCol + 1] != ELEMENT)
+			    	{
+			    		//if bottom is the same move left
+						if(randomCol - 1 >= 0 && randomRow - 1 < grid.length && grid[randomRow + 1][randomCol] == ELEMENT)
+						{
+							this.grid[randomRow][randomCol] = EMPTY;
+							this.grid[randomRow][randomCol - 1] = ELEMENT;
+						}
+			    	}
+	    		}
+	    	}
+
+	    }
   }
   
   //do not modify this method!
@@ -154,7 +234,7 @@ public class SandLab
     {
       for (int i = 0; i < display.getSpeed(); i++)
       {
-    	  phyisics();
+    	  physics();
       }
       updateDisplay();
       display.repaint();
