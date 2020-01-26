@@ -103,12 +103,12 @@ public class SandLab
 		
 		//salt comes into contact with water mix
 		contact(SALT, WATER, "mix", randomRow, randomCol);
-		contact(SALT, SWATER, "mix", randomRow, randomCol);
+		contact(SALT, SWATER, "mix", randomRow, randomCol); //mix around in water
 		contact(SWATER, WATER,"sink", randomRow, randomCol);
 		contact(WATER, SWATER,"mix", randomRow, randomCol);
-		contact(SAND, WATER, "pile", randomRow, randomCol);
+		contact(SAND, WATER, "pile", randomRow, randomCol); //pile in water
 		contact(SAND, SWATER, "pile", randomRow, randomCol);
-		contact(STONE, WATER, "sink", randomRow, randomCol);
+		contact(STONE, WATER, "sink", randomRow, randomCol); //sink in water
 		contact(STONE, SWATER, "sink", randomRow, randomCol);
 		contact(RUST, WATER, "mix", randomRow, randomCol);
 		contact(RUST, SWATER, "mix", randomRow, randomCol);
@@ -132,7 +132,7 @@ public class SandLab
 		
 
 		
-		//gas that is adicic, because why not?
+		//Deletes everything then deletes itself. The first sadomasochistic physic.
 		acidGasPhysics(ACIDGAS, randomRow, randomCol);
 
 
@@ -166,6 +166,7 @@ public class SandLab
 	//		}
 	//	}
 
+	//Probably the most boring function. Still useful though. 
 	public void colorElement(int rows, int cols, int ELEMENT, Color color )
 	{
 
@@ -175,6 +176,7 @@ public class SandLab
 		}
 	}
 
+	//When you put things together, other things tend to happen. 
 	public void contact(int ELEMENT, int contactELEMENT, String mixSinkPile, int row, int col)
 	{
 		//		int row = randomGridLength("row");
@@ -272,7 +274,8 @@ public class SandLab
 			}
 
 	}
-
+	
+	//I'm telling you, 2 + 2 = 5 and you have to just take my word on it.
 	public void combinePhysics(int ELEMENT, int contactELEMENT, int RESULT, int row, int col)
 	{
 		//		int row = randomGridLength("row");
@@ -310,6 +313,7 @@ public class SandLab
 		}
 	}
 	
+	//Even boring stone is interesting now.
 	public void stonePhysics(int ELEMENT, int row, int col)
 	{
 		int goLeftOrRight = (int) (Math.random() * 2);
@@ -360,6 +364,7 @@ public class SandLab
 		}
 	}
 
+	//Holy crap there's piles now?
 	public void powderPhysics(int ELEMENT, int row, int col)
 	{
 		int goLeftOrRight = (int) (Math.random() * 2);
@@ -384,7 +389,7 @@ public class SandLab
 					if(this.grid[row + 1 ][col + 1] == EMPTY)
 					{
 						this.grid[row][col] = EMPTY;
-						this.grid[row][col + 1] = ELEMENT;
+						this.grid[row + 1][col + 1] = ELEMENT;
 					}
 
 					else
@@ -394,10 +399,10 @@ public class SandLab
 				}
 				else if(goLeftOrRight == 1)
 				{
-					if(this.grid[row + 1][col - 1] == EMPTY )
+					if(this.grid[row + 1][col - 1] == EMPTY)
 					{
 						this.grid[row][col] = EMPTY;
-						this.grid[row][col - 1] = ELEMENT;
+						this.grid[row + 1][col - 1] = ELEMENT;
 					}
 					else
 					{
@@ -409,7 +414,8 @@ public class SandLab
 			}
 		}
 	}
-
+	
+	//Splish splash, I'm taken a bath!
 	public void liquidPhysics(int ELEMENT, int row, int col)
 	{
 		//MOVEMENT
@@ -480,9 +486,33 @@ public class SandLab
 		}
 
 	}
-
 	
-
+	//Make like some gas and get out of here!
+	public void gasPhysics(int ELEMENT, int row, int col) 
+	{
+		if(this.grid[row][col] == ELEMENT)
+		{
+			if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
+			{
+				this.grid[row][col] = ELEMENT;
+			}
+		}
+	}
+	
+	//To be or not to be, that is the question. The answer is to just be in this case.
+	public void metalPhysics(int ELEMENT, int row, int col)
+	{
+		if(this.grid[row][col] == ELEMENT)
+		{
+			if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
+			{
+				this.grid[row][col] = ELEMENT;
+			}
+		}
+		
+	}
+	
+	//Note: very stupidly made...
 	public void acidGasPhysics(int ELEMENT, int row, int col)
 	{
 		int goLeftOrRight = (int) (Math.random() * 2);
