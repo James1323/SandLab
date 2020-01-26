@@ -70,7 +70,7 @@ public class SandLab
 		{
 			for(int cols = 0; cols < grid[0].length; cols++)
 			{
-				//empty
+				//empty is black
 				colorElement(rows, cols, EMPTY, Color.black);
 				colorElement(rows, cols, METAL, Color.LIGHT_GRAY);
 				colorElement(rows, cols, SAND, Color.yellow);
@@ -101,32 +101,39 @@ public class SandLab
 		int randomRow = (int) (Math.random() * grid.length);
 		int randomCol = (int) (Math.random() * grid.length);
 		
+		//salt comes into contact with water mix
 		contact(SALT, WATER, "mix", randomRow, randomCol);
 		contact(SALT, SWATER, "mix", randomRow, randomCol);
 		contact(SWATER, WATER,"sink", randomRow, randomCol);
 		contact(WATER, SWATER,"mix", randomRow, randomCol);
-		contact(SAND, WATER, "sink", randomRow, randomCol);
-		contact(SAND, SWATER, "sink", randomRow, randomCol);
+		contact(SAND, WATER, "pile", randomRow, randomCol);
+		contact(SAND, SWATER, "pile", randomRow, randomCol);
 		contact(STONE, WATER, "sink", randomRow, randomCol);
 		contact(STONE, SWATER, "sink", randomRow, randomCol);
 		contact(RUST, WATER, "mix", randomRow, randomCol);
 		contact(RUST, SWATER, "mix", randomRow, randomCol);
 		
+		//water + salt = swater (saltwater)
+		combinePhysics(WATER, SALT, SWATER, randomRow, randomCol);
+		combinePhysics(WATER, METAL, RUST, randomRow, randomCol);
+		combinePhysics(SWATER, METAL, RUST, randomRow, randomCol);
+		
+		//physics of stone (stone and powder physics are currently the same)
 		stonePhysics(STONE, randomRow, randomCol);
-
+		
+		//sand has the physics of powder
 		powderPhysics(SAND, randomRow, randomCol);
 		powderPhysics(SALT, randomRow, randomCol);
 		powderPhysics(RUST, randomRow, randomCol);
-
-		waterPhysics(WATER, randomRow, randomCol);
-		waterPhysics(SWATER, randomRow, randomCol);
-
-		combinePhysics(WATER, SALT, SWATER, randomRow, randomCol);
-		combinePhysics(METAL, WATER, RUST, randomRow, randomCol);
-		combinePhysics(METAL, SWATER, RUST, randomRow, randomCol);
+		
+		//water has the physics of liquid
+		liquidPhysics(WATER, randomRow, randomCol);
+		liquidPhysics(SWATER, randomRow, randomCol);
 		
 
-		gasPhysics(ACIDGAS, randomRow, randomCol);
+		
+		//gas that is adicic, because why not?
+		acidGasPhysics(ACIDGAS, randomRow, randomCol);
 
 
 
@@ -168,7 +175,7 @@ public class SandLab
 		}
 	}
 
-	public void contact(int ELEMENT, int contactELEMENT, String mixOrSink, int row, int col)
+	public void contact(int ELEMENT, int contactELEMENT, String mixSinkPile, int row, int col)
 	{
 		//		int row = randomGridLength("row");
 		//		int col = randomGridLength("col");
@@ -180,7 +187,7 @@ public class SandLab
 			{
 				if(col + 1 < grid[0].length && col - 1 >= 0)
 				{
-					if(mixOrSink.equalsIgnoreCase("mix"))
+					if(mixSinkPile.equalsIgnoreCase("mix"))
 					{
 						if(leftOrRight == 0 && this.grid[row][col + 1] == contactELEMENT)
 						{
@@ -203,9 +210,58 @@ public class SandLab
 							this.grid[row][col] = contactELEMENT;
 						}
 					}
+					else if(mixSinkPile.equalsIgnoreCase("sink"))
+					{
+						if(this.grid[row + 1][col] == contactELEMENT)
+						{
+							this.grid[row + 1][col] = ELEMENT;
+							this.grid[row][col] = contactELEMENT;
+						}
+					}
+					else if(mixSinkPile.equalsIgnoreCase("pile"))
+					{
+						//Border
+						if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0) 
+						{
+							//fall if empty below
+							if(this.grid[row + 1][col] == contactELEMENT)
+							{
+
+								this.grid[row][col] = contactELEMENT;
+								this.grid[row + 1][col] = ELEMENT;
+							}
+
+							else if(leftOrRight == 0)
+							{
+								if(this.grid[row + 1 ][col + 1] == contactELEMENT)
+								{
+									this.grid[row][col] = contactELEMENT;
+									this.grid[row][col + 1] = ELEMENT;
+								}
+
+								else
+								{
+									this.grid[row][col] = ELEMENT;
+								}
+							}
+							else if(leftOrRight == 1)
+							{
+								if(this.grid[row + 1][col - 1] == contactELEMENT )
+								{
+									this.grid[row][col] = contactELEMENT;
+									this.grid[row][col - 1] = ELEMENT;
+								}
+								else
+								{
+									this.grid[row][col] = ELEMENT;
+								}
+							}
+
+
+						}
+					}
 					else
 					{
-
 						if(this.grid[row + 1][col] == contactELEMENT)
 						{
 							this.grid[row + 1][col] = ELEMENT;
@@ -217,6 +273,43 @@ public class SandLab
 
 	}
 
+	public void combinePhysics(int ELEMENT, int contactELEMENT, int RESULT, int row, int col)
+	{
+		//		int row = randomGridLength("row");
+		//		int col = randomGridLength("col");
+		if(this.grid[row][col] == ELEMENT)
+		{
+			if(row + 1 < grid.length && row -1 >= 0)
+			{
+				if(col + 1 < grid[0].length && col - 1 >= 0)
+				{
+					if(this.grid[row][col + 1] == contactELEMENT)
+					{
+						this.grid[row][col + 1] = EMPTY;
+						this.grid[row][col] = RESULT;
+
+					} 
+					else if(this.grid[row][col - 1] == contactELEMENT)
+					{
+						this.grid[row][col - 1] = EMPTY;
+						this.grid[row][col] = RESULT;
+					}
+					else if(this.grid[row + 1][col] == contactELEMENT)
+					{
+						this.grid[row + 1][col] = EMPTY;
+						this.grid[row][col] = RESULT;
+					}
+					else if(this.grid[row - 1][col] == contactELEMENT)
+					{
+						this.grid[row - 1][col] = EMPTY;
+						this.grid[row][col] = RESULT;
+					}
+				}
+			}
+
+		}
+	}
+	
 	public void stonePhysics(int ELEMENT, int row, int col)
 	{
 		int goLeftOrRight = (int) (Math.random() * 2);
@@ -276,7 +369,7 @@ public class SandLab
 		if(this.grid[row][col] == ELEMENT)
 		{
 			//Border
-			if(row + 1 < grid[0].length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0) 
+			if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0) 
 			{
 				//fall if empty below
 				if(this.grid[row + 1][col] == EMPTY)
@@ -286,10 +379,9 @@ public class SandLab
 					this.grid[row + 1][col] = ELEMENT;
 				}
 
-
-				else if(goLeftOrRight == 1)
+				else if(goLeftOrRight == 0)
 				{
-					if(this.grid[row][col - 1] == EMPTY && this.grid[row][col + 1] == EMPTY )
+					if(this.grid[row + 1 ][col + 1] == EMPTY)
 					{
 						this.grid[row][col] = EMPTY;
 						this.grid[row][col + 1] = ELEMENT;
@@ -300,9 +392,9 @@ public class SandLab
 						this.grid[row][col] = ELEMENT;
 					}
 				}
-				else if(goLeftOrRight == 0)
+				else if(goLeftOrRight == 1)
 				{
-					if(this.grid[row][col - 1] == EMPTY && this.grid[row][col + 1] == EMPTY)
+					if(this.grid[row + 1][col - 1] == EMPTY )
 					{
 						this.grid[row][col] = EMPTY;
 						this.grid[row][col - 1] = ELEMENT;
@@ -318,7 +410,7 @@ public class SandLab
 		}
 	}
 
-	public void waterPhysics(int ELEMENT, int row, int col)
+	public void liquidPhysics(int ELEMENT, int row, int col)
 	{
 		//MOVEMENT
 		int goLeftOrRight = (int) (Math.random() * 2);
@@ -389,44 +481,9 @@ public class SandLab
 
 	}
 
-	public void combinePhysics(int ELEMENT, int contactELEMENT, int RESULT, int row, int col)
-	{
-		//		int row = randomGridLength("row");
-		//		int col = randomGridLength("col");
-		if(this.grid[row][col] == ELEMENT)
-		{
-			if(row + 1 < grid.length && row -1 >= 0)
-			{
-				if(col + 1 < grid[0].length && col - 1 >= 0)
-				{
-					if(this.grid[row][col + 1] == contactELEMENT)
-					{
-						this.grid[row][col + 1] = EMPTY;
-						this.grid[row][col] = RESULT;
+	
 
-					} 
-					else if(this.grid[row][col - 1] == contactELEMENT)
-					{
-						this.grid[row][col - 1] = EMPTY;
-						this.grid[row][col] = RESULT;
-					}
-					else if(this.grid[row + 1][col] == contactELEMENT)
-					{
-						this.grid[row + 1][col] = EMPTY;
-						this.grid[row][col] = RESULT;
-					}
-					else if(this.grid[row - 1][col] == contactELEMENT)
-					{
-						this.grid[row - 1][col] = EMPTY;
-						this.grid[row][col] = RESULT;
-					}
-				}
-			}
-
-		}
-	}
-
-	public void gasPhysics(int ELEMENT, int row, int col)
+	public void acidGasPhysics(int ELEMENT, int row, int col)
 	{
 		int goLeftOrRight = (int) (Math.random() * 2);
 		//		int row = randomGridLength("row");
