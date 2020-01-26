@@ -112,11 +112,13 @@ public class SandLab
 		contact(STONE, SWATER, "sink", randomRow, randomCol);
 		contact(RUST, WATER, "mix", randomRow, randomCol);
 		contact(RUST, SWATER, "mix", randomRow, randomCol);
+		contact(RUST, WATER, "sink", randomRow, randomCol);
+		contact(RUST, SWATER, "sink", randomRow, randomCol);
 		
 		//water + salt = swater (saltwater)
-		combinePhysics(WATER, SALT, SWATER, randomRow, randomCol);
-		combinePhysics(WATER, METAL, RUST, randomRow, randomCol);
-		combinePhysics(SWATER, METAL, RUST, randomRow, randomCol);
+		combine(WATER, SALT, SWATER, randomRow, randomCol);
+		combine(WATER, METAL, RUST, randomRow, randomCol);
+		combine(SWATER, METAL, RUST, randomRow, randomCol);
 		
 		//physics of stone (stone and powder physics are currently the same)
 		stonePhysics(STONE, randomRow, randomCol);
@@ -177,7 +179,7 @@ public class SandLab
 	}
 
 	//When you put things together, other things tend to happen. 
-	public void contact(int ELEMENT, int contactELEMENT, String mixSinkPile, int row, int col)
+	public void contact(int ELEMENT, int contactELEMENT, String mixSinkFloatPile, int row, int col)
 	{
 		//		int row = randomGridLength("row");
 		//		int col = randomGridLength("col");
@@ -189,7 +191,7 @@ public class SandLab
 			{
 				if(col + 1 < grid[0].length && col - 1 >= 0)
 				{
-					if(mixSinkPile.equalsIgnoreCase("mix"))
+					if(mixSinkFloatPile.equalsIgnoreCase("mix"))
 					{
 						if(leftOrRight == 0 && this.grid[row][col + 1] == contactELEMENT)
 						{
@@ -212,7 +214,7 @@ public class SandLab
 							this.grid[row][col] = contactELEMENT;
 						}
 					}
-					else if(mixSinkPile.equalsIgnoreCase("sink"))
+					else if(mixSinkFloatPile.equalsIgnoreCase("sink"))
 					{
 						if(this.grid[row + 1][col] == contactELEMENT)
 						{
@@ -220,7 +222,7 @@ public class SandLab
 							this.grid[row][col] = contactELEMENT;
 						}
 					}
-					else if(mixSinkPile.equalsIgnoreCase("pile"))
+					else if(mixSinkFloatPile.equalsIgnoreCase("pile"))
 					{
 						//Border
 						if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0) 
@@ -262,6 +264,14 @@ public class SandLab
 
 						}
 					}
+					else if(mixSinkFloatPile.equalsIgnoreCase("float"))
+					{
+						if(this.grid[row - 1][col] == contactELEMENT)
+						{
+							this.grid[row - 1][col] = ELEMENT;
+							this.grid[row][col] = contactELEMENT;
+						}
+					}
 					else
 					{
 						if(this.grid[row + 1][col] == contactELEMENT)
@@ -276,7 +286,7 @@ public class SandLab
 	}
 	
 	//I'm telling you, 2 + 2 = 5 and you have to just take my word on it.
-	public void combinePhysics(int ELEMENT, int contactELEMENT, int RESULT, int row, int col)
+	public void combine(int ELEMENT, int contactELEMENT, int RESULT, int row, int col)
 	{
 		//		int row = randomGridLength("row");
 		//		int col = randomGridLength("col");
