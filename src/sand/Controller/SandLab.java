@@ -115,6 +115,7 @@ public class SandLab
 		contact(RUST, WATER, "sink", randomRow, randomCol);
 		contact(RUST, SWATER, "sink", randomRow, randomCol);
 		
+		
 		//water + salt = swater (saltwater)
 		combine(WATER, SALT, SWATER, randomRow, randomCol);
 		combine(WATER, METAL, RUST, randomRow, randomCol);
@@ -149,24 +150,6 @@ public class SandLab
 	}
 
 	//HELPER FUNCTIONS
-
-	//	public int randomGridLength(String rowOrCol)
-	//	{
-	//		int randomRow = (int) (Math.random() * grid.length);
-	//		int randomCol = (int) (Math.random() * grid.length);
-	//		if(rowOrCol.equalsIgnoreCase("row"))
-	//		{
-	//		return randomRow; 
-	//		}
-	//		else if(rowOrCol.equalsIgnoreCase("col"))
-	//		{
-	//		return randomCol;
-	//		}
-	//		else
-	//		{
-	//			return 0;
-	//		}
-	//	}
 
 	//Probably the most boring function. Still useful though. 
 	public void colorElement(int rows, int cols, int ELEMENT, Color color )
