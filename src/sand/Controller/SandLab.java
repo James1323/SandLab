@@ -101,9 +101,16 @@ public class SandLab
 		int randomRow = (int) (Math.random() * grid.length);
 		int randomCol = (int) (Math.random() * grid.length);
 		
-		contact(WATER, SALT, randomRow, randomCol);
-		contact(SWATER, SALT, randomRow, randomCol);
-		contact(SWATER, WATER, randomRow, randomCol);
+		contact(SALT, WATER, "mix", randomRow, randomCol);
+		contact(SALT, SWATER, "mix", randomRow, randomCol);
+		contact(SWATER, WATER,"sink", randomRow, randomCol);
+		contact(WATER, SWATER,"mix", randomRow, randomCol);
+		contact(SAND, WATER, "sink", randomRow, randomCol);
+		contact(SAND, SWATER, "sink", randomRow, randomCol);
+		contact(STONE, WATER, "sink", randomRow, randomCol);
+		contact(STONE, SWATER, "sink", randomRow, randomCol);
+		contact(RUST, WATER, "mix", randomRow, randomCol);
+		contact(RUST, SWATER, "mix", randomRow, randomCol);
 		
 		stonePhysics(STONE, randomRow, randomCol);
 
@@ -161,7 +168,7 @@ public class SandLab
 		}
 	}
 
-	public void contact(int ELEMENT, int contactELEMENT, int row, int col)
+	public void contact(int ELEMENT, int contactELEMENT, String mixOrSink, int row, int col)
 	{
 		//		int row = randomGridLength("row");
 		//		int col = randomGridLength("col");
@@ -173,25 +180,37 @@ public class SandLab
 			{
 				if(col + 1 < grid[0].length && col - 1 >= 0)
 				{
-					if(leftOrRight == 0 && this.grid[row][col + 1] == contactELEMENT)
+					if(mixOrSink.equalsIgnoreCase("mix"))
 					{
-						this.grid[row][col + 1] = ELEMENT;
-						this.grid[row][col] = contactELEMENT;
-					} 
-					else if(leftOrRight == 1 && this.grid[row][col - 1] == contactELEMENT)
-					{
-						this.grid[row][col - 1] = ELEMENT;
-						this.grid[row][col] = contactELEMENT;
+						if(leftOrRight == 0 && this.grid[row][col + 1] == contactELEMENT)
+						{
+							this.grid[row][col + 1] = ELEMENT;
+							this.grid[row][col] = contactELEMENT;
+						} 
+						else if(leftOrRight == 1 && this.grid[row][col - 1] == contactELEMENT)
+						{
+							this.grid[row][col - 1] = ELEMENT;
+							this.grid[row][col] = contactELEMENT;
+						}
+						else if(upOrDown == 0 && this.grid[row + 1][col] == contactELEMENT)
+						{
+							this.grid[row + 1][col] = ELEMENT;
+							this.grid[row][col] = contactELEMENT;
+						}
+						else if(upOrDown == 0 && this.grid[row - 1][col] == contactELEMENT)
+						{
+							this.grid[row - 1][col] = ELEMENT;
+							this.grid[row][col] = contactELEMENT;
+						}
 					}
-					else if(upOrDown == 0 && this.grid[row + 1][col] == contactELEMENT)
+					else
 					{
-						this.grid[row + 1][col] = ELEMENT;
-						this.grid[row][col] = contactELEMENT;
-					}
-					else if(upOrDown == 0 && this.grid[row - 1][col] == contactELEMENT)
-					{
-						this.grid[row - 1][col] = ELEMENT;
-						this.grid[row][col] = contactELEMENT;
+
+						if(this.grid[row + 1][col] == contactELEMENT)
+						{
+							this.grid[row + 1][col] = ELEMENT;
+							this.grid[row][col] = contactELEMENT;
+						}
 					}
 				}
 			}
