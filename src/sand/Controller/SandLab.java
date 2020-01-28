@@ -45,7 +45,7 @@ public class SandLab
 		names[STONE] = "Stone";
 		names[METAL] = "Metal";
 		names[RUST] = "Rust";
-		
+
 
 		//1. Add code to initialize the data member grid with same dimensions
 		this.grid = new int [numRows] [numCols];
@@ -100,7 +100,7 @@ public class SandLab
 		//remember that you need to watch for the edges of the array
 		int randomRow = (int) (Math.random() * grid.length);
 		int randomCol = (int) (Math.random() * grid.length);
-		
+
 		//salt comes into contact with water mix
 		contact(SALT, WATER, "mix", randomRow, randomCol);
 		contact(SALT, SWATER, "mix", randomRow, randomCol); //mix around in water
@@ -114,27 +114,27 @@ public class SandLab
 		contact(RUST, SWATER, "mix", randomRow, randomCol);
 		contact(RUST, WATER, "sink", randomRow, randomCol);
 		contact(RUST, SWATER, "sink", randomRow, randomCol);
-		
-		
+
+
 		//water + salt = swater (saltwater)
 		combine(WATER, SALT, SWATER, randomRow, randomCol);
 		combine(WATER, METAL, RUST, randomRow, randomCol);
 		combine(SWATER, METAL, RUST, randomRow, randomCol);
-		
+
 		//physics of stone (stone and powder physics are currently the same)
 		stonePhysics(STONE, randomRow, randomCol);
-		
+
 		//sand has the physics of powder
 		powderPhysics(SAND, randomRow, randomCol);
 		powderPhysics(SALT, randomRow, randomCol);
 		powderPhysics(RUST, randomRow, randomCol);
-		
+
 		//water has the physics of liquid
 		liquidPhysics(WATER, randomRow, randomCol);
 		liquidPhysics(SWATER, randomRow, randomCol);
-		
 
-		
+
+
 		//Deletes everything then deletes itself. The first sadomasochistic physic.
 		acidGasPhysics(ACIDGAS, randomRow, randomCol);
 
@@ -267,7 +267,7 @@ public class SandLab
 			}
 
 	}
-	
+
 	//I'm telling you, 2 + 2 = 5 and you have to just take my word on it.
 	public void combine(int ELEMENT, int contactELEMENT, int RESULT, int row, int col)
 	{
@@ -305,7 +305,7 @@ public class SandLab
 
 		}
 	}
-	
+
 	//Even boring stone is interesting now.
 	public void stonePhysics(int ELEMENT, int row, int col)
 	{
@@ -407,7 +407,7 @@ public class SandLab
 			}
 		}
 	}
-	
+
 	//Splish splash, I'm taken a bath!
 	public void liquidPhysics(int ELEMENT, int row, int col)
 	{
@@ -418,73 +418,86 @@ public class SandLab
 
 		if(this.grid[row][col] == ELEMENT)
 		{        //floor					//right wall				left wall	    Ceiling
-			if(row + 1 < grid[0].length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
+			if(row + 1 < grid[0].length)
 			{
-				
-				//bottom border and space below is empty
-				if(checker(row + 1, col) == EMPTY)
+				if(col + 1 < grid[0].length)
 				{
-					move("down", ELEMENT, 1, row, col);
-				}
-				else
-				{
-					
-				
-
-				if(goLeftOrRight == 0)
-				{
-					//if random is less than grid size and right is empty
-					if(grid[row][col + 1] == EMPTY )
+					if(col - 1 >= 0)
 					{
-						//if bottom is the same element move right and if right is less than grid size
-						if(grid[row + 1][col] != EMPTY)
+						if(row -1 >= 0)
 						{
-							this.grid[row][col] = EMPTY;
-							this.grid[row][col + 1] = ELEMENT;
-						}
-						else if(checker(row, col - 1) != EMPTY)
-						{
-							move("left", ELEMENT, 1, row, col);
-						}
-						else
-						{
-							this.grid[row][col] = ELEMENT;
+							
+							//bottom border and space below is empty
+							if(checker(row + 1, col) == EMPTY)
+							{
+								move("down", ELEMENT, 1, row, col);
+							}
+							else
+							{
+
+
+
+								if(goLeftOrRight == 0)
+								{
+									//if random is less than grid size and right is empty
+									if(grid[row][col + 1] == EMPTY )
+									{
+										//if bottom is the same element move right and if right is less than grid size
+										if(grid[row + 1][col] != EMPTY)
+										{
+											this.grid[row][col] = EMPTY;
+											this.grid[row][col + 1] = ELEMENT;
+										}
+										else if(checker(row, col - 1) != EMPTY)
+										{
+											move("left", ELEMENT, 1, row, col);
+										}
+										else
+										{
+											this.grid[row][col] = ELEMENT;
+										}
+									}
+								}
+
+
+								else if(goLeftOrRight == 1)
+								{
+									//if left is empty
+									if (grid[row][col - 1] == EMPTY)
+									{
+										//if bottom is not empty
+										if(grid[row + 1][col] != EMPTY)
+										{
+											this.grid[row][col] = EMPTY;
+											this.grid[row][col - 1] = ELEMENT;
+										}
+										//if bottom is greater than grid size move left
+										else if(checker(row, col + 1) != EMPTY)
+										{
+											move("right", ELEMENT, 1, row, col);
+										}
+										else
+										{
+											this.grid[row][col] = ELEMENT;
+										}
+
+									}
+								}
+							}
 						}
 					}
 				}
+			}
+			else
+			{
 
-
-				else if(goLeftOrRight == 1)
-				{
-					//if left is empty
-					if (grid[row][col - 1] == EMPTY)
-					{
-						//if bottom is not empty
-						if(grid[row + 1][col] != EMPTY)
-						{
-							this.grid[row][col] = EMPTY;
-							this.grid[row][col - 1] = ELEMENT;
-						}
-						//if bottom is greater than grid size move left
-						else if(checker(row, col + 1) != EMPTY)
-						{
-							move("right", ELEMENT, 1, row, col);
-						}
-						else
-						{
-							this.grid[row][col] = ELEMENT;
-						}
-
-					}
-				}
-				}
 			}
 
 
 		}
 
 	}
-	
+
 	//Make like some gas and get out of here!
 	public void gasPhysics(int ELEMENT, int row, int col) 
 	{
@@ -496,7 +509,7 @@ public class SandLab
 			}
 		}
 	}
-	
+
 	//To be or not to be, that is the question. The answer is to just be in this case.
 	public void metalPhysics(int ELEMENT, int row, int col)
 	{
@@ -507,9 +520,9 @@ public class SandLab
 				this.grid[row][col] = ELEMENT;
 			}
 		}
-		
+
 	}
-	
+
 	//Note: very stupidly made...
 	public void acidGasPhysics(int ELEMENT, int row, int col)
 	{
@@ -581,7 +594,7 @@ public class SandLab
 
 		}
 	}
-	
+
 	public int checker(int row, int col)
 	{
 		if(grid[row][col] == EMPTY)
@@ -593,7 +606,7 @@ public class SandLab
 			return 1;
 		}
 	}
-	
+
 	public void move(String movement, int ELEMENT, int spaces, int row, int col )
 	{
 		if(movement.equalsIgnoreCase("up"))
@@ -617,7 +630,7 @@ public class SandLab
 			up(row, col, spaces, ELEMENT);
 		}
 	}
-	
+
 	public void up(int row, int col, int spaces, int ELEMENT)
 	{
 		this.grid[row][col] = EMPTY;
@@ -638,7 +651,7 @@ public class SandLab
 		this.grid[row][col] = EMPTY;
 		this.grid[row][col + spaces] = ELEMENT;
 	}
-	
+
 
 	//do not modify this method!
 	public void run()
