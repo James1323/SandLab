@@ -1,8 +1,8 @@
-package Controller;
+package sand.Controller;
 import java.awt.*;
 import java.util.*;
 
-import View.SandDisplay;
+import sand.View.SandDisplay;
 
 public class SandLab
 {
@@ -170,7 +170,7 @@ public class SandLab
 		int upOrDown = (int) (Math.random() * 2);
 
 		if(grid[row][col] == ELEMENT)
-			if(row + 1 < grid.length && row -1 >= 0)
+			if(row + 1 < grid[0].length && row -1 >= 0)
 			{
 				if(col + 1 < grid[0].length && col - 1 >= 0)
 				{
@@ -275,7 +275,7 @@ public class SandLab
 		//		int col = randomGridLength("col");
 		if(this.grid[row][col] == ELEMENT)
 		{
-			if(row + 1 < grid.length && row -1 >= 0)
+			if(row + 1 < grid[0].length && row -1 >= 0)
 			{
 				if(col + 1 < grid[0].length && col - 1 >= 0)
 				{
@@ -316,7 +316,7 @@ public class SandLab
 		if(this.grid[row][col] == ELEMENT)
 		{
 			//Border
-			if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0) 
+			if(row + 1 < grid[0].length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0) 
 			{
 				//fall if empty below
 				if(this.grid[row + 1][col] == EMPTY)
@@ -367,7 +367,7 @@ public class SandLab
 		if(this.grid[row][col] == ELEMENT)
 		{
 			//Border
-			if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0) 
+			if(row + 1 < grid[0].length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0) 
 			{
 				//fall if empty below
 				if(this.grid[row + 1][col] == EMPTY)
@@ -417,30 +417,27 @@ public class SandLab
 		//		int col = randomGridLength("col");
 
 		if(this.grid[row][col] == ELEMENT)
-		{     //floor						//right wall						left wall			Ceiling
+		{        //floor					//right wall				left wall	    Ceiling
 			if(row + 1 < grid[0].length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
 			{
+				
 				//bottom border and space below is empty
-				if(grid[row + 1][col] == EMPTY)
+				if(checker(row + 1, col) == EMPTY)
 				{
-					//switch empty with element
-					this.grid[row][col] = EMPTY;
-					this.grid[row + 1][col] = ELEMENT;
+					down(row + 1, col, ELEMENT);
 				}
+				else
+				{
+					
+				
 
-				else if(goLeftOrRight == 0 && col + 1 < grid.length && col - 1 >= 0)
+				if(goLeftOrRight == 0)
 				{
 					//if random is less than grid size and right is empty
-					if(col + 1 < grid.length && grid[row][col + 1] == EMPTY )
+					if(grid[row][col + 1] == EMPTY )
 					{
 						//if bottom is the same element move right and if right is less than grid size
-						if(col + 1 < grid.length && row + 1 < grid.length && grid[row + 1][col] != EMPTY)
-						{
-							this.grid[row][col] = EMPTY;
-							this.grid[row][col + 1] = ELEMENT;
-						}
-						//if bottom is greater than grid size move right
-						else if(col + 1 >= 0 && row + 1 < grid.length && grid[row + 1][col] > grid.length)
+						if(grid[row + 1][col] != EMPTY)
 						{
 							this.grid[row][col] = EMPTY;
 							this.grid[row][col + 1] = ELEMENT;
@@ -453,25 +450,25 @@ public class SandLab
 				}
 
 
-				else if(goLeftOrRight == 1 && col - 1 >= 0 && col + 1 < grid.length)
+				else if(goLeftOrRight == 1)
 				{
-					//if random is greater than 0 and grid left is empty and left is not element
-					if (col - 1 >= 0 && grid[row][col - 1] == EMPTY)
+					//if left is empty
+					if (grid[row][col - 1] == EMPTY)
 					{
-						//if bottom is the same move left
-						if(col - 1 >= 0 && row - 1 < grid.length && grid[row + 1][col] != EMPTY)
+						//if bottom is not empty
+						if(grid[row + 1][col] != EMPTY)
 						{
 							this.grid[row][col] = EMPTY;
 							this.grid[row][col - 1] = ELEMENT;
 						}
 						//if bottom is greater than grid size move left
-						else if(col - 1 >= 0 && row - 1 < grid.length && grid[row + 1][col] > grid.length)
+						else
 						{
-							this.grid[row][col] = EMPTY;
-							this.grid[row][col - 1] = ELEMENT;
+							this.grid[row][col] = ELEMENT;
 						}
 
 					}
+				}
 				}
 			}
 
@@ -485,7 +482,7 @@ public class SandLab
 	{
 		if(this.grid[row][col] == ELEMENT)
 		{
-			if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
+			if(row + 1 < grid[0].length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
 			{
 				this.grid[row][col] = ELEMENT;
 			}
@@ -497,7 +494,7 @@ public class SandLab
 	{
 		if(this.grid[row][col] == ELEMENT)
 		{
-			if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
+			if(row + 1 < grid[0].length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
 			{
 				this.grid[row][col] = ELEMENT;
 			}
@@ -515,7 +512,7 @@ public class SandLab
 		if(this.grid[row][col] == ELEMENT)
 		{
 			//upper border and space above is empty
-			if(row + 1 < grid.length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
+			if(row + 1 < grid[0].length && col + 1 < grid[0].length && col - 1 >= 0 && row -1 >= 0)
 			{
 				//switch empty with element
 				this.grid[row][col] = EMPTY;
@@ -552,7 +549,7 @@ public class SandLab
 				}
 
 
-				else if(goLeftOrRight == 1 && col - 1 >= 0 && col + 1 < grid.length)
+				else if(goLeftOrRight == 1 && col - 1 >= 0 && col + 1 < grid[0].length)
 				{
 					//if random is greater than 0 and grid left is empty and left is not element
 					if (col - 1 >= 0 && grid[row][col - 1] == EMPTY)
@@ -576,6 +573,64 @@ public class SandLab
 
 		}
 	}
+	
+	public int checker(int row, int col)
+	{
+		if(grid[row][col] == EMPTY)
+		{
+			return EMPTY;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	
+	public void movement(String movement, int ELEMENT, int row, int col, int spaces)
+	{
+		if(movement.equalsIgnoreCase("up"))
+		{
+			up(row, col, spaces, ELEMENT);
+		}
+		else if(movement.equalsIgnoreCase("down"))
+		{
+			down(row, col, spaces, ELEMENT);
+		}
+		else if(movement.equalsIgnoreCase("left"))
+		{
+			left(row, col, spaces, ELEMENT);
+		}
+		else if(movement.equalsIgnoreCase("right"))
+		{
+			right(row, col, spaces, ELEMENT);
+		}
+		else
+		{
+			up(row, col, spaces, ELEMENT);
+		}
+	}
+	
+	public void up(int row, int col, int amount, int ELEMENT)
+	{
+		this.grid[row][col] = EMPTY;
+		this.grid[row - amount][col] = ELEMENT;
+	}
+	public void down(int row, int col, int amount, int ELEMENT)
+	{
+		this.grid[row][col] = EMPTY;
+		this.grid[row + 1][col] = ELEMENT;
+	}
+	public void left(int row, int col, int amount, int ELEMENT)
+	{
+		this.grid[row][col] = EMPTY;
+		this.grid[row][col - 1] = ELEMENT;
+	}
+	public void right(int row, int col, int amount, int ELEMENT)
+	{
+		this.grid[row][col] = EMPTY;
+		this.grid[row][col + 1] = ELEMENT;
+	}
+	
 
 	//do not modify this method!
 	public void run()
