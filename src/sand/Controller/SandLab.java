@@ -424,7 +424,7 @@ public class SandLab
 				//bottom border and space below is empty
 				if(checker(row + 1, col) == EMPTY)
 				{
-					down(row + 1, col, ELEMENT);
+					move("down", ELEMENT, 1, row, col);
 				}
 				else
 				{
@@ -441,6 +441,10 @@ public class SandLab
 						{
 							this.grid[row][col] = EMPTY;
 							this.grid[row][col + 1] = ELEMENT;
+						}
+						else if(checker(row, col - 1) != EMPTY)
+						{
+							move("left", ELEMENT, 1, row, col);
 						}
 						else
 						{
@@ -462,6 +466,10 @@ public class SandLab
 							this.grid[row][col - 1] = ELEMENT;
 						}
 						//if bottom is greater than grid size move left
+						else if(checker(row, col + 1) != EMPTY)
+						{
+							move("right", ELEMENT, 1, row, col);
+						}
 						else
 						{
 							this.grid[row][col] = ELEMENT;
@@ -586,7 +594,7 @@ public class SandLab
 		}
 	}
 	
-	public void movement(String movement, int ELEMENT, int row, int col, int spaces)
+	public void move(String movement, int ELEMENT, int spaces, int row, int col )
 	{
 		if(movement.equalsIgnoreCase("up"))
 		{
@@ -610,25 +618,25 @@ public class SandLab
 		}
 	}
 	
-	public void up(int row, int col, int amount, int ELEMENT)
+	public void up(int row, int col, int spaces, int ELEMENT)
 	{
 		this.grid[row][col] = EMPTY;
-		this.grid[row - amount][col] = ELEMENT;
+		this.grid[row - spaces][col] = ELEMENT;
 	}
-	public void down(int row, int col, int amount, int ELEMENT)
+	public void down(int row, int col, int spaces, int ELEMENT)
 	{
 		this.grid[row][col] = EMPTY;
-		this.grid[row + 1][col] = ELEMENT;
+		this.grid[row + spaces][col] = ELEMENT;
 	}
-	public void left(int row, int col, int amount, int ELEMENT)
+	public void left(int row, int col, int spaces, int ELEMENT)
 	{
 		this.grid[row][col] = EMPTY;
-		this.grid[row][col - 1] = ELEMENT;
+		this.grid[row][col - spaces] = ELEMENT;
 	}
-	public void right(int row, int col, int amount, int ELEMENT)
+	public void right(int row, int col, int spaces, int ELEMENT)
 	{
 		this.grid[row][col] = EMPTY;
-		this.grid[row][col + 1] = ELEMENT;
+		this.grid[row][col + spaces] = ELEMENT;
 	}
 	
 
